@@ -1,0 +1,37 @@
+class Solution {
+    public int minEatingSpeed(int[] piles, int h) {
+        int low = 1; // slowest possible speed
+        int high = getMax(piles); // fastest needed
+
+        while (low < high) {
+            int mid = low + (high - low) / 2; // try a middle speed
+            int hours = getHours(piles, mid); // how many hours it would take
+
+            if (hours > h) {
+                low = mid + 1; // too slow, try faster
+            } else {
+                high = mid; // maybe try a smaller speed
+            }
+        }
+
+        return low; // minimum valid speed
+    }
+
+    // Find the largest pile
+    private int getMax(int[] piles) {
+        int max = Integer.MIN_VALUE;
+        for (int pile : piles) {
+            max = Math.max(max, pile);
+        }
+        return max;
+    }
+
+    // Calculate how many hours needed at given speed
+    private int getHours(int[] piles, int speed) {
+        int hours = 0;
+        for (int pile : piles) {
+            hours += (pile + speed - 1) / speed; // ceil(pile / speed)
+        }
+        return hours;
+    }
+}
